@@ -1,0 +1,17 @@
+USE SpatialDB
+CREATE TABLE AirPollutionPM25 (
+	row_id int,
+    country nvarchar(255),
+    city nvarchar(255),
+    Year nvarchar(255),
+	pm25 real,
+	latitude real,
+	longitude real,
+	population real,
+	wbinc16_text nvarchar(255),
+	Region nvarchar(255),
+	conc_pm25 nvarchar(255),
+	color_pm25 nvarchar(255),
+	Geom geometry,
+	PRIMARY KEY (row_id)
+);
