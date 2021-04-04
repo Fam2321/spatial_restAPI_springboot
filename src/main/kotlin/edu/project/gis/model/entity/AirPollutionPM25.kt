@@ -7,8 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.vividsolutions.jts.geom.Geometry
 import javax.persistence.Column
 import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
 
@@ -17,7 +15,7 @@ import javax.persistence.Table
 data class AirPollutionPM25 (
     @Id
     @Column(name = "row_id")
-    var row_id: Int? = null,
+    var row_id: String? = null,
     @Column(name = "country")
     var country: String? = null,
     @Column(name = "city")
