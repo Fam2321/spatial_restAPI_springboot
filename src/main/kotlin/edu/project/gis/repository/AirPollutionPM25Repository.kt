@@ -1,5 +1,6 @@
 package edu.project.gis.repository
 
+import com.vividsolutions.jts.geom.Geometry
 import edu.project.gis.model.entity.AirPollutionPM25
 import edu.project.gis.model.response.AvgResponse
 import edu.project.gis.model.response.PopResponse
@@ -9,7 +10,7 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, Int> {
+interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, String> {
     @Query(value = "SELECT * FROM AirPollutionPM25 WHERE row_id = 1", nativeQuery = true)
     fun findpm25_1(): MutableList<AirPollutionPM25>
 
@@ -33,4 +34,13 @@ interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, Int> {
 
     @Query(value = "SELECT new edu.project.gis.model.response.PopResponse(l.country,SUM(l.population)) FROM AirPollutionPM25 l WHERE l.color_pm25 = ?1 AND l.Year = ?2 GROUP BY l.country ORDER BY l.country, SUM(l.population)")
     fun findPopByColor(@Param("color") color: String, @Param("year") year: String): MutableList<PopResponse>
+
+    @Query(value = "SELECT l FROM AirPollutionPM25 l WHERE l.Year = ?1")
+    fun findCityByYear(@Param("year") year: String): MutableList<AirPollutionPM25>
+
+    @Query(value = "select l from AirPollutionPM25 l WHERE l.city = ?1")
+    fun findCityPoint(@Param("city") city: String): AirPollutionPM25
+
+    @Query(value = "select * from AirPollutionPM25 air WHERE air.city != ?1 ORDER BY air.Geom.STDistance(?2)", nativeQuery = true)
+    fun findCityDistance(@Param("city") city: String, @Param("geom") geom: Geometry): MutableList<AirPollutionPM25>
 }
