@@ -1,7 +1,9 @@
 package edu.project.gis.controller
 
-import edu.project.gis.model.entity.AirPollutionPM25
+import com.vividsolutions.jts.geom.Coordinate
+import com.vividsolutions.jts.geom.Geometry
 import edu.project.gis.model.response.MarkerResponse
+import edu.project.gis.model.response.Position
 import edu.project.gis.service.VisualService
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -23,7 +25,22 @@ class Controller(
     }
 
     @GetMapping(value = ["/findClosetCity"])
-    fun findClosetCity(): List<AirPollutionPM25> {
+    fun findClosetCity(): List<MarkerResponse> {
         return visualService.findClosetCity("Bangkok")
     }
+
+    @GetMapping(value = ["/findNeighbor"])
+    fun thailandNeighbor(
+        @RequestParam year: String
+    ): List<MarkerResponse> {
+        return visualService.thailandNeighbor(year)
+    }
+
+    @GetMapping(value = ["/findMBR"])
+    fun findMBR(
+        @RequestParam year: String
+    ): List<Position> {
+        return visualService.findMBR(year)
+    }
+
 }

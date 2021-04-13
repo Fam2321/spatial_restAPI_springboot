@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, String> {
-    @Query(value = "SELECT * FROM AirPollutionPM25 WHERE row_id = 1", nativeQuery = true)
-    fun findpm25_1(): MutableList<AirPollutionPM25>
-
     @Query(value = "SELECT l FROM AirPollutionPM25 l WHERE l.pm25 > ?1 AND l.Year = ?2")
     fun findByPM25(@Param("pm25") pm: Double, @Param("year") year: String): MutableList<AirPollutionPM25>
 
@@ -43,4 +40,10 @@ interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, String> {
 
     @Query(value = "select * from AirPollutionPM25 air WHERE air.city != ?1 ORDER BY air.Geom.STDistance(?2)", nativeQuery = true)
     fun findCityDistance(@Param("city") city: String, @Param("geom") geom: Geometry): MutableList<AirPollutionPM25>
+
+    @Query(value = "select l FROM AirPollutionPM25 l WHERE l.country in (?1) AND l.Year = ?2")
+    fun findCityNeighbor(@Param("country") country: ArrayList<String>, @Param("year") year: String): MutableList<AirPollutionPM25>
+
+    @Query(value = "select ?1.STUnion(air.Geom) from AirPollutionPM25 air where air.country = 'Thailand' and air.Year = ?2", nativeQuery = true)
+    fun union(@Param(value = "geom") geom: Geometry, @Param("year") year: String): Geometry
 }
