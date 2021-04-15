@@ -42,8 +42,14 @@ interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, String> {
     fun findCityDistance(@Param("city") city: String, @Param("geom") geom: Geometry): MutableList<AirPollutionPM25>
 
     @Query(value = "select l FROM AirPollutionPM25 l WHERE l.country in (?1) AND l.Year = ?2")
-    fun findCityNeighbor(@Param("country") country: ArrayList<String>, @Param("year") year: String): MutableList<AirPollutionPM25>
+    fun findCitiesInCountiesOnYear(@Param("country") country: ArrayList<String>, @Param("year") year: String): MutableList<AirPollutionPM25>
 
     @Query(value = "select ?1.STUnion(air.Geom) from AirPollutionPM25 air where air.country = 'Thailand' and air.Year = ?2", nativeQuery = true)
     fun union(@Param(value = "geom") geom: Geometry, @Param("year") year: String): Geometry
+
+    @Query(value = "select l.country FROM AirPollutionPM25 l where l.Year = ?1 group by l.country order by count(l.city) DESC")
+    fun findCountriesHaveMostCitiesInYear(@Param("year") year: String): MutableList<String>
+
+    @Query(value = "select l from AirPollutionPM25 l where l.wbinc16_text='low income' and l.Year = ?1")
+    fun findCitiesHaveLowIncome(@Param("year") year: String): MutableList<AirPollutionPM25>
 }

@@ -43,4 +43,17 @@ class Controller(
         return visualService.findMBR(year)
     }
 
+    @GetMapping(value = ["/findMostCity"])
+    fun findMostCity(
+        @RequestParam year: String
+    ): List<MarkerResponse> {
+        return visualService.findCitiesOfCountryHaveHighCity(year)
+    }
+
+    @GetMapping(value = ["/findLowIncome"])
+    fun findCitiesHaveLowIncome(
+        @RequestParam year: String
+    ): List<MarkerResponse> {
+        return visualService.findCitiesHaveLowIncome(year)
+    }
 }

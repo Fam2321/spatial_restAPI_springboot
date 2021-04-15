@@ -1,11 +1,9 @@
 package edu.project.gis.service
 
-import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.geom.GeometryFactory
 import edu.project.gis.extension.toFormat
 import edu.project.gis.extension.toMarker
-import edu.project.gis.model.entity.AirPollutionPM25
 import edu.project.gis.model.response.MarkerResponse
 import edu.project.gis.model.response.Position
 import edu.project.gis.repository.AirPollutionPM25Repository
@@ -36,16 +34,29 @@ class VisualService (
         var neighborName = arrayListOf<String>()
         worldRepository.findNeighbor(thaiGeom.geom!!).map { model -> neighborName.add(model.name!!) }
         return airPollutionPM25Repository
-            .findCityNeighbor(neighborName, year)
+            .findCitiesInCountiesOnYear(neighborName, year)
             .map { model -> model.toMarker() }
     }
 
     fun findMBR(year: String): List<Position> {
         var thaiGeom =
-            airPollutionPM25Repository.findCityNeighbor(arrayListOf("Thailand"),year)
+            airPollutionPM25Repository.findCitiesInCountiesOnYear(arrayListOf("Thailand"),year)
         var all = arrayListOf<Geometry>()
         thaiGeom.map { model -> all.add(model.Geom!!) }
         var multiGeom = GeometryFactory().buildGeometry(all)
         return multiGeom.envelope.coordinates.map { model -> model.toFormat() }
+    }
+
+    fun findCitiesOfCountryHaveHighCity(year: String): List<MarkerResponse> {
+        var countryList = airPollutionPM25Repository.findCountriesHaveMostCitiesInYear(year)
+        var cities = airPollutionPM25Repository
+            .findCitiesInCountiesOnYear(arrayListOf(countryList.first()), year)
+        return cities.map { model -> model.toMarker() }
+    }
+
+    fun findCitiesHaveLowIncome(year: String): List<MarkerResponse> {
+        return airPollutionPM25Repository
+            .findCitiesHaveLowIncome(year)
+            .map { model -> model.toMarker() }
     }
 }
