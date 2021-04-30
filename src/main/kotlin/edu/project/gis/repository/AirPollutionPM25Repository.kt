@@ -26,7 +26,7 @@ interface AirPollutionPM25Repository : JpaRepository<AirPollutionPM25, String> {
     @Query(value = "SELECT DISTINCT l.Year FROM AirPollutionPM25 l ORDER BY  l.Year")
     fun distinctYear(): MutableList<String>
 
-    @Query(value = "SELECT DISTINCT l.color_pm25 FROM AirPollutionPM25 l ORDER BY  l.color_pm25")
+    @Query(value = "SELECT DISTINCT concat(l.color_pm25, ' ',l.conc_pm25) FROM AirPollutionPM25 l ORDER BY 1")
     fun distinctColor(): MutableList<String>
 
     @Query(value = "SELECT new edu.project.gis.model.response.PopResponse(l.country,SUM(l.population)) FROM AirPollutionPM25 l WHERE l.color_pm25 = ?1 AND l.Year = ?2 GROUP BY l.country ORDER BY l.country, SUM(l.population)")

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@CrossOrigin(origins = ["http://localhost:3030"])
+@CrossOrigin(origins = ["https://goaldiggervue.azurewebsites.net"])
 @RequestMapping("/api/visual")
 class Controller(
     private val visualService: VisualService

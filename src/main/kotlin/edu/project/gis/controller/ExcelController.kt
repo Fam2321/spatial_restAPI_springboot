@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
-@CrossOrigin(origins = ["http://localhost:3030"])
+@CrossOrigin(origins = ["https://goaldiggervue.azurewebsites.net"])
 @RequestMapping("/api/excel")
 class ExcelController(
     private val excelService: ExcelService,
@@ -149,10 +149,10 @@ class ExcelController(
     @GetMapping("/distinctColor")
     fun getDistinctColor(): ResponseEntity<List<String>> {
         return try {
-            val countryList: List<String> = reportService.getDistinctColor()
-            if (countryList.isEmpty())
+            val colors: List<String> = reportService.getDistinctColor()
+            if (colors.isEmpty())
                 ResponseEntity<List<String>>(HttpStatus.NO_CONTENT)
-            else ResponseEntity<List<String>>(countryList, HttpStatus.OK)
+            else ResponseEntity<List<String>>(colors, HttpStatus.OK)
         } catch (e: Exception) {
             ResponseEntity<List<String>>(null, HttpStatus.INTERNAL_SERVER_ERROR)
         }
