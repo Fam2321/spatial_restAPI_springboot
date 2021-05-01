@@ -164,7 +164,7 @@ class ExcelController(
         @RequestParam year: String
     ): ResponseEntity<List<PopResponse>> {
         return try {
-            val airPollutionPM25: List<PopResponse> = reportService.getPopByColorAndYear(color, year)
+            val airPollutionPM25: List<PopResponse> = reportService.getPopByColorAndYear(color.split(" ")[0], year)
             if (airPollutionPM25.isEmpty())
                 ResponseEntity<List<PopResponse>>(HttpStatus.NO_CONTENT)
             else ResponseEntity<List<PopResponse>>(airPollutionPM25, HttpStatus.OK)
@@ -179,7 +179,7 @@ class ExcelController(
         @RequestParam year: String
     ): ResponseEntity<Resource> {
         val filename = "PopulationInHealth.xlsx"
-        val file = InputStreamResource(excelService.loadPop(color, year))
+        val file = InputStreamResource(excelService.loadPop(color.split(" ")[0], year))
         return ResponseEntity.ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=$filename")
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel;charset=utf-8"))
